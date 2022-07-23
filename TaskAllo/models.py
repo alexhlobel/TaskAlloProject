@@ -21,16 +21,16 @@ class Team(models.Model):
 
 
 class Worker(Employee):
-    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, related_name='team')
+    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, related_name='worker_team')
 
 
-class Manager(Worker):
-    team = models.ManyToManyField(Team, through='Managership', related_name='team')
+class Manager(Employee):
+    team = models.ManyToManyField(Team, through='Managership', related_name='manager_team')
 
 
 class Managership(models.Model):
-    team = models.ForeignKey(Manager, on_delete=models.SET_NULL, null=True, related_name='team')
-    manager = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, related_name='manager')
+    team = models.ForeignKey(Manager, on_delete=models.SET_NULL, null=True, related_name='manship_team')
+    manager = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True, related_name='manship_manager')
 
 
 class Admin(Manager):
@@ -47,11 +47,11 @@ class StatusTask(models.Model):
 class Task(models.Model):
     name = models.TextField(max_length=120, null=False, blank=False)
     description = models.TextField()
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='team')
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='task_team')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='Image', null=True, blank=True)
-    author = models.ForeignKey(Manager, on_delete=models.SET_NULL, null=True, related_name='author')
+    author = models.ForeignKey(Manager, on_delete=models.SET_NULL, null=True, related_name='task_author')
     status_task = models.ForeignKey(StatusTask, on_delete=models.SET_NULL, null=True, related_name='status_task')
     deadline = models.DateTimeField(null=True, blank=True)
     connection = models.ManyToManyField('Task', null=True, blank=True)
@@ -59,4 +59,3 @@ class Task(models.Model):
     def __str__(self):
         return self.name
 
-# Create your models here.
