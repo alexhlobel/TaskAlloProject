@@ -93,6 +93,17 @@ class StatusTask(models.Model):
         return self.name
 
 
+class ImageSource(models.Model):
+    class Meta:
+        verbose_name = 'Image Source'
+        verbose_name_plural = 'Image Sources'
+
+    pass
+
+    def __str__(self):
+        return 'Source ' + f'{self.id}'
+
+
 class Task(models.Model):
     class Meta:
         verbose_name = 'Task'
@@ -103,7 +114,7 @@ class Task(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='task_team')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    # image_source_id = models.OneToOneField(ImageSource, on_delete=models.SET_NULL, null=True, blank=True)
+    image_source = models.OneToOneField(ImageSource, on_delete=models.CASCADE, null=True, blank=True)
     author = models.ForeignKey(Manager, on_delete=models.SET_NULL, null=True, related_name='task_author')
     status_task = models.ForeignKey(StatusTask, on_delete=models.SET_NULL, null=True, related_name='status_task')
     deadline = models.DateTimeField(null=True, blank=True)
@@ -113,20 +124,33 @@ class Task(models.Model):
         return self.name
 
 
+class Connection(models.Model):
+    class Meta:
+        verbose_name = 'Connection'
+        verbose_name_plural = 'Connections'
+
+    task_1 = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='task_1')
+    task_2 = models.ForeignKey(Task, on_delete=models.SET_NULL, null=True, blank=True,
+                               related_name='task_2')
+
+    def __str__(self):
+        return f'{self.task_1}' + ' - ' + f'{self.task_2}'
+
+
 class Comment(models.Model):
+    class Meta:
+        verbose_name = 'Comment'
+        verbose_name_plural = 'Comments'
+
     owner = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
+    image_source = models.OneToOneField(ImageSource, on_delete=models.CASCADE,  null=True, blank=True)
 
-
-class ImageSource(models.Model):
-    class Meta:
-        verbose_name = 'Image Source'
-        verbose_name_plural = 'Image Sources'
-
-    comment = models.OneToOneField(Comment, on_delete=models.CASCADE, related_name='source_comment')
-    task = models.OneToOneField(Comment, on_delete=models.CASCADE, related_name='source_task')
+    def __str__(self):
+        return self.content[:50]
 
 
 class Image(models.Model):
@@ -136,3 +160,6 @@ class Image(models.Model):
 
     image = models.ImageField(upload_to='Image')
     source = models.ForeignKey(ImageSource, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.image.name

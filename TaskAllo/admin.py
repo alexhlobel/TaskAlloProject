@@ -1,9 +1,10 @@
 from django.contrib import admin
 # from django.contrib.auth.admin import UserAdmin
 from .models import *
+from django.utils.safestring import mark_safe
 
-print(User.__dict__.keys())
-print(models.ImageField.__dict__.keys())
+# print(User.__dict__.keys())
+# print(models.ImageField.__dict__.keys())
 '''
     date_hierarchy = 'created_at'
     list_display = ('title', 'created_at', 'preview_content', 'author', 'preview_image')
@@ -44,6 +45,10 @@ class StatusEmployeeAdmin(NameAdmin):
 
 
 class TeamAdmin(NameAdmin):
+    pass
+
+
+class EmployeeAdmin(admin.ModelAdmin):
     pass
 
 
@@ -115,14 +120,14 @@ class StatusTaskAdmin(NameAdmin):
 class TaskAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     ordering = ['name']
-    list_display = ['name', 'id', 'description', 'team', 'created_at', 'updated_at',
+    list_display = ['name', 'id', 'description', 'team', 'created_at', 'updated_at', 'image_source',
                     'author', 'status_task', 'deadline', ]
     list_filter = ['team', 'author']
     search_fields = ['username', 'email']
     readonly_fields = ('created_at', 'updated_at', 'id', 'connection')
     fieldsets = (
         (None, {
-            'fields': ['name', 'id', 'description', 'team', 'created_at', 'updated_at',
+            'fields': ['name', 'id', 'description', 'team', 'created_at', 'updated_at', 'image_source',
                        'author', 'status_task', 'deadline', 'connection']
         }),
         ('Additional parameters', {
@@ -132,14 +137,63 @@ class TaskAdmin(admin.ModelAdmin):
     )
 
 
+class ConnectionAdmin(admin.ModelAdmin):
+    fields = ['id', 'task_1', 'task_2', ]
+    ordering = ['task_1', ]
+    list_display = ['__str__', ]
+    search_fields = ['task_1', 'task_2', ]
+    readonly_fields = ('id', )
+
+
+class CommentAdmin(admin.ModelAdmin):
+
+    @staticmethod
+    def preview_content(obj):
+        return obj.content[:30]
+
+    # @staticmethod
+    # def preview_image(obj):
+    #     if obj.image:
+    #         return mark_safe(f'<img src="{obj.image.url}" width="100" />')
+
+    fields = ['id', 'owner', 'task', 'created_at', 'content', 'image_source']
+    date_hierarchy = 'created_at'
+    ordering = ['created_at', ]
+    list_filter = ['owner', ]
+    list_display = ['id', 'owner', 'task', 'created_at', 'preview_content', 'image_source']
+    search_fields = ['owner', 'content', ]
+    readonly_fields = ('id', 'created_at', )
+
+
+class ImageAdmin(admin.ModelAdmin):
+    @staticmethod
+    def image_name(obj):
+        return obj.image.name
+
+    fields = ['id', 'image', 'source', ]
+    ordering = ['id', ]
+    list_display = ['__str__', 'source', ]
+    search_fields = ['image', 'source', ]
+    readonly_fields = ('id', )
+
+
+class ImageSourceAdmin(admin.ModelAdmin):
+    fields = ['id']
+    ordering = ['id', ]
+    list_display = ['__str__', 'id']
+    search_fields = ['id', ]
+    readonly_fields = ('id', )
+
+
 admin.site.register(StatusEmployee, StatusEmployeeAdmin)
 admin.site.register(Team, TeamAdmin)
+admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Worker, WorkerAdmin)
 admin.site.register(Manager, ManagerAdmin)
 admin.site.register(Managership, ManagershipAdmin)
 admin.site.register(Admin, AdminAdmin)
 admin.site.register(StatusTask, StatusTaskAdmin)
 admin.site.register(Task, TaskAdmin)
-admin.site.register(Comment)
-admin.site.register(Image)
-admin.site.register(ImageSource)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(Image, ImageAdmin)
+admin.site.register(ImageSource, ImageSourceAdmin)
