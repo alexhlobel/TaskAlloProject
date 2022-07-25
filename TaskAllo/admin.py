@@ -3,35 +3,7 @@ from django.contrib import admin
 from .models import *
 from django.utils.safestring import mark_safe
 
-# print(User.__dict__.keys())
-# print(models.ImageField.__dict__.keys())
-'''
-    date_hierarchy = 'created_at'
-    list_display = ('title', 'created_at', 'preview_content', 'author', 'preview_image')
-    list_filter = ('created_at', 'author')
-    search_fields = ('title', 'content', 'author__username')
-    readonly_fields = ('created_at', 'created_at')
-    fieldsets = (
-        (None, {
-            'fields': ('title', 'content', 'author', 'image')
-        }),
-        ('Дополнительная информация', {
-            'classes': ('collapse',),
-            'fields': ('created_at',),
-        }),
-    )
-
-    @staticmethod
-    def preview_image(obj):
-        if obj.image:
-            print(obj.image.url)
-            return mark_safe(f'<img src="{obj.image.url}" width="100" />')
-            # return mark_safe(f'<img src="../media/ImagePost/pikachu.png" width="100" />')
-
-    @staticmethod
-    def preview_content(obj):
-        return obj.content[:30]
-'''
+# Как захэшировать пароль в админке без UserAdmin?
 
 
 class NameAdmin(admin.ModelAdmin):
@@ -49,7 +21,23 @@ class TeamAdmin(NameAdmin):
 
 
 class EmployeeAdmin(admin.ModelAdmin):
-    pass
+    date_hierarchy = 'date_joined'
+    ordering = ['username']
+    list_display = ['username', 'id', 'status_emp', 'last_login', 'is_superuser', 'first_name', 'last_name',
+                    'email', 'is_staff', 'is_active', 'date_joined', ]
+    list_filter = ['status_emp', ]
+    search_fields = ['username', 'email']
+    readonly_fields = ('date_joined', 'last_login', 'id')
+    fieldsets = (
+        (None, {
+            'fields': ('username', 'email', 'id', 'status_emp', 'first_name',
+                       'last_name', 'date_joined', 'password',)
+        }),
+        ('Additional parameters', {
+            'classes': ('collapse',),
+            'fields': ('last_login', 'is_superuser', 'is_staff', 'is_active'),
+        }),
+    )
 
 
 class WorkerAdmin(admin.ModelAdmin):
@@ -118,10 +106,21 @@ class StatusTaskAdmin(NameAdmin):
 
 
 class TaskAdmin(admin.ModelAdmin):
+
+    @staticmethod
+    def preview_image(obj):
+        try:
+            image_query = Image.objects.filter(source_id=obj.image_source.id)
+            images_str = '<br><br>'.join([f'<img src="{element.image.url}" width="100" />' for element in image_query])
+            images = mark_safe(images_str)
+            return images
+        except AttributeError:
+            return 'No image'
+
     date_hierarchy = 'created_at'
     ordering = ['name']
     list_display = ['name', 'id', 'description', 'team', 'created_at', 'updated_at', 'image_source',
-                    'author', 'status_task', 'deadline', ]
+                    'preview_image', 'author', 'status_task', 'deadline', ]
     list_filter = ['team', 'author']
     search_fields = ['username', 'email']
     readonly_fields = ('created_at', 'updated_at', 'id', 'connection')
@@ -151,16 +150,21 @@ class CommentAdmin(admin.ModelAdmin):
     def preview_content(obj):
         return obj.content[:30]
 
-    # @staticmethod
-    # def preview_image(obj):
-    #     if obj.image:
-    #         return mark_safe(f'<img src="{obj.image.url}" width="100" />')
+    @staticmethod
+    def preview_image(obj):
+        try:
+            image_query = Image.objects.filter(source_id=obj.image_source.id)
+            images_str = '<br><br>'.join([f'<img src="{element.image.url}" width="100" />' for element in image_query])
+            images = mark_safe(images_str)
+            return images
+        except AttributeError:
+            return 'No image'
 
     fields = ['id', 'owner', 'task', 'created_at', 'content', 'image_source']
     date_hierarchy = 'created_at'
     ordering = ['created_at', ]
     list_filter = ['owner', ]
-    list_display = ['id', 'owner', 'task', 'created_at', 'preview_content', 'image_source']
+    list_display = ['preview_content', 'id', 'owner', 'task', 'created_at', 'preview_image', 'image_source']
     search_fields = ['owner', 'content', ]
     readonly_fields = ('id', 'created_at', )
 
@@ -170,17 +174,33 @@ class ImageAdmin(admin.ModelAdmin):
     def image_name(obj):
         return obj.image.name
 
+    @staticmethod
+    def preview_image(obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" width="100" />')
+
     fields = ['id', 'image', 'source', ]
     ordering = ['id', ]
-    list_display = ['__str__', 'source', ]
+    list_display = ['__str__', 'source', 'preview_image']
     search_fields = ['image', 'source', ]
     readonly_fields = ('id', )
 
 
 class ImageSourceAdmin(admin.ModelAdmin):
+
+    @staticmethod
+    def preview_image(obj):
+        try:
+            image_query = Image.objects.filter(source_id=obj.id)
+            images_str = '<br><br>'.join([f'<img src="{element.image.url}" width="100" />' for element in image_query])
+            images = mark_safe(images_str)
+            return images
+        except AttributeError:
+            return 'No image'
+
     fields = ['id']
     ordering = ['id', ]
-    list_display = ['__str__', 'id']
+    list_display = ['__str__', 'id', 'preview_image']
     search_fields = ['id', ]
     readonly_fields = ('id', )
 
