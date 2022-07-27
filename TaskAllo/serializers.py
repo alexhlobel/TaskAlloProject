@@ -48,12 +48,6 @@ class AdminSerializer(serializers.ModelSerializer):
                   'first_name', 'last_name', 'date_joined', 'password', ]
 
 
-class StatusTaskSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StatusTask
-        fields = ['name']
-
-
 class ImageSourceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ImageSource

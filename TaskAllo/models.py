@@ -82,17 +82,6 @@ class Admin(Manager):
         return self.username
 
 
-class StatusTask(models.Model):
-    class Meta:
-        verbose_name = 'Status Task'
-        verbose_name_plural = 'Status Tasks'
-
-    name = models.TextField(max_length=120)
-
-    def __str__(self):
-        return self.name
-
-
 class ImageSource(models.Model):
     class Meta:
         verbose_name = 'Image Source'
@@ -105,6 +94,14 @@ class ImageSource(models.Model):
 
 
 class Task(models.Model):
+    choices_status = [
+        ('backlog', 'Backlog'),
+        ('ready to dev', 'Ready to Dev'),
+        ('in progress', 'In progress'),
+        ('ready to QA', 'Ready to QA'),
+        ('production', 'Production')
+    ]
+
     class Meta:
         verbose_name = 'Task'
         verbose_name_plural = 'Tasks'
@@ -116,7 +113,8 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     image_source = models.OneToOneField(ImageSource, on_delete=models.CASCADE, null=True, blank=True)
     author = models.ForeignKey(Manager, on_delete=models.SET_NULL, null=True, related_name='task_author')
-    status_task = models.ForeignKey(StatusTask, on_delete=models.SET_NULL, null=True, related_name='status_task')
+    status_task = models.TextField(max_length=120, choices=choices_status, default='backlog')
+    # status_task = models.ForeignKey(StatusTask, on_delete=models.SET_NULL, null=True, related_name='status_task')
     deadline = models.DateTimeField(null=True, blank=True)
     connection = models.ManyToManyField('Task', null=True, blank=True)
 
@@ -147,7 +145,7 @@ class Comment(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
-    image_source = models.OneToOneField(ImageSource, on_delete=models.CASCADE,  null=True, blank=True)
+    image_source = models.OneToOneField(ImageSource, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return self.content[:50]
