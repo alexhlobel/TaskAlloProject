@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import *
 from django.utils.safestring import mark_safe
 
+
 # Как захэшировать пароль в админке без UserAdmin?
 
 
@@ -43,7 +44,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 class WorkerAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_joined'
     ordering = ['username']
-    list_display = ['username', 'id', 'status_emp', 'team', 'last_login', 'is_superuser',  'first_name', 'last_name',
+    list_display = ['username', 'id', 'status_emp', 'team', 'last_login', 'is_superuser', 'first_name', 'last_name',
                     'email', 'is_staff', 'is_active', 'date_joined', ]
     list_filter = ['status_emp', 'team']
     search_fields = ['username', 'email']
@@ -51,7 +52,7 @@ class WorkerAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('username', 'email', 'id', 'status_emp', 'team', 'first_name',
-                       'last_name', 'date_joined', 'password', )
+                       'last_name', 'date_joined', 'password',)
         }),
         ('Additional parameters', {
             'classes': ('collapse',),
@@ -71,7 +72,7 @@ class ManagerAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_joined'
     ordering = ['username']
     list_display = ['username', 'id', 'status_emp', 'get_teams', 'last_login',
-                    'is_superuser',  'first_name', 'last_name', 'email',
+                    'is_superuser', 'first_name', 'last_name', 'email',
                     'is_staff', 'is_active', 'date_joined', ]
     list_filter = ['status_emp', 'team']
     search_fields = ['username', 'email']
@@ -79,7 +80,7 @@ class ManagerAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('username', 'email', 'id', 'status_emp', 'team', 'first_name',
-                       'last_name', 'date_joined', 'password', )
+                       'last_name', 'date_joined', 'password',)
         }),
         ('Additional parameters', {
             'classes': ('collapse',),
@@ -141,7 +142,7 @@ class ConnectionAdmin(admin.ModelAdmin):
     ordering = ['task_1', ]
     list_display = ['__str__', ]
     search_fields = ['task_1', 'task_2', ]
-    readonly_fields = ('id', )
+    readonly_fields = ('id',)
 
 
 class CommentAdmin(admin.ModelAdmin):
@@ -166,7 +167,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['owner', ]
     list_display = ['preview_content', 'id', 'owner', 'task', 'created_at', 'preview_image', 'image_source']
     search_fields = ['owner', 'content', ]
-    readonly_fields = ('id', 'created_at', )
+    readonly_fields = ('id', 'created_at',)
 
 
 class ImageAdmin(admin.ModelAdmin):
@@ -183,7 +184,7 @@ class ImageAdmin(admin.ModelAdmin):
     ordering = ['id', ]
     list_display = ['__str__', 'source', 'preview_image']
     search_fields = ['image', 'source', ]
-    readonly_fields = ('id', )
+    readonly_fields = ('id',)
 
 
 class ImageSourceAdmin(admin.ModelAdmin):
@@ -202,10 +203,9 @@ class ImageSourceAdmin(admin.ModelAdmin):
     ordering = ['id', ]
     list_display = ['__str__', 'id', 'preview_image']
     search_fields = ['id', ]
-    readonly_fields = ('id', )
+    readonly_fields = ('id',)
 
 
-admin.site.register(StatusEmployee, StatusEmployeeAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Worker, WorkerAdmin)

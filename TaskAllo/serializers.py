@@ -2,12 +2,6 @@ from rest_framework import serializers
 from .models import *
 
 
-class StatusEmployeeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StatusEmployee
-        fields = ['name']
-
-
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
@@ -25,14 +19,14 @@ class WorkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Worker
         fields = ['username', 'email', 'id', 'status_emp', 'team'
-                  'first_name', 'last_name', 'date_joined', 'password', ]
+                                                           'first_name', 'last_name', 'date_joined', 'password', ]
 
 
 class ManagerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manager
         fields = ['username', 'email', 'id', 'status_emp', 'team'
-                  'first_name', 'last_name', 'date_joined', 'password', ]
+                                                           'first_name', 'last_name', 'date_joined', 'password', ]
 
 
 class ManagershipSerializer(serializers.ModelSerializer):
@@ -45,7 +39,7 @@ class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Admin
         fields = ['username', 'email', 'id', 'status_emp', 'team'
-                  'first_name', 'last_name', 'date_joined', 'password', ]
+                                                           'first_name', 'last_name', 'date_joined', 'password', ]
 
 
 class ImageSourceSerializer(serializers.ModelSerializer):
