@@ -5,16 +5,40 @@ from .models import *
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'id', 'first_name',
-                  'last_name', 'date_joined', 'password', 'RolesChoice']
+        fields = ['username', 'email', 'RolesChoice', 'id', 'first_name',
+                  'last_name', 'date_joined', 'password']
 
 
-# class TeamSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Team
-#         fields = ['id', 'name']
-#
-#
+class ImageTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageTask
+        fields = '__all__'
+
+
+class ImageCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ImageComment
+        fields = '__all__'
+
+
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = '__all__'
+
+
+class ConnectSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ['id', 'name', 'team', 'created_at', 'updated_at',
+                  'author', 'status_task', 'deadline', 'image_task', 'comment_task']
+
 # class WorkerSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Worker
