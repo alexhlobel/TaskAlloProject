@@ -9,6 +9,11 @@ class RolesChoice(models.TextChoices):
     hard = 'hard'
 
 
+class StatusWorkerChoice(models.TextChoices):
+    In_team = 'In_team'
+    Bench = 'Bench'
+
+
 class CustomUser(AbstractUser):
     role = models.CharField(choices=RolesChoice.choices, max_length=20)
 
@@ -21,21 +26,15 @@ class ImageComment(models.Model):
     image_comment = models.ImageField(upload_to='Image')
 
 
-class StatusWorkerChoice(models.TextChoices):
-    In_team = 'In_team'
-    Bench = 'Bench'
-
-
 class Team(models.Model):
     class Meta:
         verbose_name = 'Team'
         verbose_name_plural = 'Teams'
 
     name = models.CharField(max_length=150)
-    worker = models.OneToOneField(CustomUser, on_delete=models.Prefetch, limit_choices_to={"role": RolesChoice.worker},
+    worker = models.OneToOneField(CustomUser, on_delete=models.Prefetch, limit_choices_to={'role': RolesChoice.worker},
                                   related_name='worker')
     manager = models.ManyToManyField(CustomUser, limit_choices_to={"role": RolesChoice.manager}, related_name='manager')
-    admin = models.ManyToManyField(CustomUser, limit_choices_to={"role": RolesChoice.admin}, related_name='admin')
 
     def __str__(self):
         return self.name
@@ -57,7 +56,7 @@ class Comment(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
-    image_comment = models.ManyToManyField(ImageComment)
+    image_comment = models.ManyToManyField(ImageComment, null=True, blank=True)
 
     def __str__(self):
         return self.content[:50]
@@ -77,7 +76,7 @@ class Task(models.Model):
                                related_name='task_author')
     status_task = models.TextField(choices=StatusTaskChoice.choices, default='Backlog', verbose_name='Status task')
     deadline = models.DateTimeField(null=True, blank=True)
-    image_task = models.ManyToManyField(ImageTask)
+    image_task = models.ManyToManyField(ImageTask, null=True, blank=True)
     comment_task = models.ForeignKey(Comment, on_delete=models.CASCADE, null=True, blank=True, related_name='Comment')
 
     def __str__(self):
