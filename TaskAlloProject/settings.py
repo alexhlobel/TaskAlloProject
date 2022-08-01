@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'TaskAllo',
     'rest_framework',
 ]
+AUTH_USER_MODEL = 'TaskAllo.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
