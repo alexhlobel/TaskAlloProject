@@ -1,6 +1,6 @@
 from rest_framework import viewsets, response
 from .serializers import *
-# from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -17,5 +17,5 @@ class TeamViewSet(viewsets.ModelViewSet):
 
 class UsersViewSet(viewsets.ModelViewSet):
     """Список всех пользователей"""
-    serializer_class = EmployeeSerializer
-    queryset = Employee.objects.all()
+    serializer_class = UserSerializer
+    queryset = CustomUser.objects.all()
