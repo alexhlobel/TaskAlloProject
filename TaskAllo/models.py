@@ -1,29 +1,55 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from autoslug import AutoSlugField
 
 
 class RolesChoice(models.TextChoices):
     worker = 'worker'
     manager = 'manager'
     admin = 'admin'
-    hard = 'hard'
 
 
 class StatusWorkerChoice(models.TextChoices):
-    In_team = 'In_team'
-    Bench = 'Bench'
+    in_team = 'in_team'
+    bench = 'bench'
+    fired = 'fired'
 
 
 class CustomUser(AbstractUser):
     role = models.CharField(choices=RolesChoice.choices, max_length=20)
+    status = models.CharField(max_length=15, choices=StatusWorkerChoice.choices, default=StatusWorkerChoice.bench)
+    team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name="current_team")
+    slug = AutoSlugField(populate_from='username', unique=True)
+
+    def set_status(self):
+        status = {
+            True: StatusWorkerChoice.in_team,
+            False: StatusWorkerChoice.bench,
+        }
+        if self.status == StatusWorkerChoice.fired:
+            self.team = None
+            return
+        self.status = status[bool(self.team)]
+
+    @property
+    def count_tasks(self):
+        return self.assigned_task.count()
+
+    def save(self, *args, **kwargs):
+        self.set_status()
+        return super().save(self, *args, **kwargs)
 
 
-class ImageTask(models.Model):
-    image_task = models.ImageField(upload_to='Image')
+class Image(models.Model):
+    image = models.ImageField(upload_to='Image', related_name='image')
 
 
-class ImageComment(models.Model):
-    image_comment = models.ImageField(upload_to='Image')
+# class ImageTask(models.Model):
+#     image_task = models.ImageField(upload_to='Image')
+#
+#
+# class ImageComment(models.Model):
+#     image_comment = models.ImageField(upload_to='Image')
 
 
 class Team(models.Model):
@@ -32,8 +58,8 @@ class Team(models.Model):
         verbose_name_plural = 'Teams'
 
     name = models.CharField(max_length=150)
-    worker = models.OneToOneField(CustomUser, on_delete=models.Prefetch, limit_choices_to={'role': RolesChoice.worker},
-                                  related_name='worker')
+    # worker = models.OneToOneField(CustomUser, on_delete=models.Prefetch, limit_choices_to={'role': RolesChoice.worker},
+    #                               related_name='worker')
     manager = models.ManyToManyField(CustomUser, limit_choices_to={"role": RolesChoice.manager}, related_name='manager')
 
     def __str__(self):
@@ -41,25 +67,11 @@ class Team(models.Model):
 
 
 class StatusTaskChoice(models.TextChoices):
-    Backlog = 'Backlog'
-    Ready_to_dev = 'Ready to dev'
-    In_progress = 'In progress'
-    Ready_to_QA = 'Ready to QA'
-    Production = 'Production'
-
-
-class Comment(models.Model):
-    class Meta:
-        verbose_name = 'Comment'
-        verbose_name_plural = 'Comments'
-
-    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    content = models.TextField()
-    image_comment = models.ManyToManyField(ImageComment, blank=True)
-
-    def __str__(self):
-        return self.content[:50]
+    backlog = 'Backlog'
+    ready_to_dev = 'Ready to dev'
+    in_progress = 'In progress'
+    ready_to_qa = 'Ready to QA'
+    production = 'Production'
 
 
 class Task(models.Model):
@@ -72,15 +84,31 @@ class Task(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='task_team', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=False, blank=False,
-                               related_name='task_author')
+    author = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=False, blank=False,
+                                  related_name='task_author',
+                                  limit_choices_to={'role': (RolesChoice.manager, RolesChoice.admin)})
     status_task = models.TextField(choices=StatusTaskChoice.choices, default='Backlog', verbose_name='Status task')
     deadline = models.DateTimeField(null=True, blank=True)
-    image_task = models.ManyToManyField(ImageTask, blank=True)
-    comment_task = models.ForeignKey(Comment, on_delete=models.CASCADE, blank=True, related_name='Comment')
+    image_task = models.ManyToManyField(Image, blank=True, null=True)
+    assigned_task = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='assigned_task')
 
     def __str__(self):
         return self.name
+
+
+class Comment(models.Model):
+    class Meta:
+        verbose_name = 'Comment'
+        verbose_name_plural = 'Comments'
+
+    author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    content = models.TextField()
+    task = models.ForeignKey('Task', on_delete=models.CASCADE)
+    image_comment = models.ManyToManyField(Image, blank=True, null=True)
+
+    def __str__(self):
+        return self.content[:50]
 
 # class Employee(User):
 #     emp_status = [
