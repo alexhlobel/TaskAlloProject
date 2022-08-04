@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'TaskAllo',
+    'apps.Comments',
+    'apps.Employees',
+    'apps.Task',
     'rest_framework',
 ]
 AUTH_USER_MODEL = 'TaskAllo.CustomUser'
