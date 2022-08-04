@@ -9,6 +9,11 @@ class CustomUserAdmin(admin.ModelAdmin):
     pass
 
 
+@admin.register(Team)
+class TeamAdmin(admin.ModelAdmin):
+    pass
+
+
 # @admin.register(ImageComment)
 # class ImageCommentAdmin(admin.ModelAdmin):
 #     pass
