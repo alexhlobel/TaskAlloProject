@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 from .models import *
 from django.utils.safestring import mark_safe
 
@@ -9,14 +8,19 @@ class CustomUserAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(ImageComment)
-class ImageCommentAdmin(admin.ModelAdmin):
-    pass
+# @admin.register(ImageComment)
+# class ImageCommentAdmin(admin.ModelAdmin):
+#     pass
+#
+#
+# @admin.register(ImageTask)
+# class ImageTaskAdmin(admin.ModelAdmin):
+#     list_display = ['id', 'image_task']
 
 
-@admin.register(ImageTask)
-class ImageTaskAdmin(admin.ModelAdmin):
-    list_display = ['id', 'image_task']
+@admin.register(Image)
+class ImageAdmin(admin.ModelAdmin):
+    list_display = ['id', 'image']
 
 
 @admin.register(Team)

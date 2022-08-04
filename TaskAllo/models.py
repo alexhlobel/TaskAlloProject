@@ -16,6 +16,11 @@ class StatusWorkerChoice(models.TextChoices):
 
 
 class CustomUser(AbstractUser):
+
+    class Meta:
+        verbose_name = 'Custom User'
+        verbose_name_plural = 'Custom Users'
+
     role = models.CharField(choices=RolesChoice.choices, max_length=20)
     status = models.CharField(max_length=15, choices=StatusWorkerChoice.choices, default=StatusWorkerChoice.bench)
     team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name="current_team")
@@ -41,7 +46,12 @@ class CustomUser(AbstractUser):
 
 
 class Image(models.Model):
-    image = models.ImageField(upload_to='Image', related_name='image')
+
+    class Meta:
+        verbose_name = 'Custom User'
+        verbose_name_plural = 'Custom Users'
+
+    image = models.ImageField(upload_to='Image')
 
 
 # class ImageTask(models.Model):
@@ -84,7 +94,7 @@ class Task(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='task_team', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    author = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=False, blank=False,
+    author = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=True, blank=True,
                                   related_name='task_author',
                                   limit_choices_to={'role': (RolesChoice.manager, RolesChoice.admin)})
     status_task = models.TextField(choices=StatusTaskChoice.choices, default='Backlog', verbose_name='Status task')

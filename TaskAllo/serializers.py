@@ -9,16 +9,22 @@ class UserSerializer(serializers.ModelSerializer):
                   'last_name', 'date_joined', 'password']
 
 
-class ImageTaskSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ImageTask
+        model = Image
         fields = '__all__'
 
 
-class ImageCommentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ImageComment
-        fields = '__all__'
+# class ImageTaskSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ImageTask
+#         fields = '__all__'
+#
+#
+# class ImageCommentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ImageComment
+#         fields = '__all__'
 
 
 class TeamSerializer(serializers.ModelSerializer):
