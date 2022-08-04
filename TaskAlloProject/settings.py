@@ -38,13 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'TaskAllo',
-    'apps.Comments',
-    'apps.Employees',
-    'apps.Task',
+    'apps.Comments.apps.CommentsConfig',
+    'apps.Employees.apps.EmployeesConfig',
+    'apps.Task.apps.TaskConfig',
     'rest_framework',
 ]
-AUTH_USER_MODEL = 'TaskAllo.CustomUser'
+AUTH_USER_MODEL = 'Employees.CustomUser'
+
+ROOT_URLCONF = 'TaskAlloProject.urls'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -55,8 +56,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'TaskAlloProject.urls'
 
 TEMPLATES = [
     {
