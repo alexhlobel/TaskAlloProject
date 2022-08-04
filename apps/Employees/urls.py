@@ -1,8 +1,9 @@
-from .views import *
+from django.urls import path
+from apps.Employees.views import UsersViewSet, TeamViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'tasks', TaskViewSet, basename='Tasks')
+
 router.register(r'teams', TeamViewSet, basename='Teams')
 router.register(r'users', UsersViewSet, basename='Users')
 
