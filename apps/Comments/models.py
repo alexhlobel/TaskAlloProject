@@ -1,5 +1,6 @@
-from apps.Employees.models import *
+# from apps.Employees.models import CustomUser, Team, RolesChoice, StatusWorkerChoice
 from apps.Task.models import *
+from django.db import models
 
 
 class ImageComment(models.Model):

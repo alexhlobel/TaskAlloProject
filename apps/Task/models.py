@@ -1,4 +1,5 @@
-from apps.Employees.models import *
+from apps.Employees.models import CustomUser, Team, RolesChoice, StatusWorkerChoice
+from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.db.models import Q
 
