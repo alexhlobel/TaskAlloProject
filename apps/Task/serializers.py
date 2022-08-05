@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Task, ImageTask
+from apps.Employees.serializers import UserSerializer, TeamSerializer
 
 
 class ImageTaskSerializer(serializers.ModelSerializer):
@@ -9,8 +10,10 @@ class ImageTaskSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    team = TeamSerializer(many=False)
+    creator = UserSerializer(many=False)
+
     class Meta:
         model = Task
-        fields = '__all__'
-        # fields = ['name', 'id', 'description', 'team', 'created_at', 'updated_at',
-        #           'creator', 'status_task', 'deadline']
+        fields = ['name', 'id', 'description', 'team', 'created_at', 'updated_at',
+                  'creator', 'status_task', 'deadline']
