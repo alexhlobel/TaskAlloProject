@@ -15,7 +15,7 @@ class Comment(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
-    image_comment = models.ManyToManyField(ImageComment)
+    image_comment = models.ManyToManyField(ImageComment, blank=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='task', null=True, blank=True)
 
     def __str__(self):
