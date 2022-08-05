@@ -7,8 +7,9 @@ class ImageTaskSerializer(serializers.ModelSerializer):
         model = ImageTask
         fields = '__all__'
 
+
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ['name', 'id', 'description', 'team', 'created_at', 'updated_at',
-                  'image_task', 'creator', 'status_task', 'deadline', 'image_task', 'assigned_task', 'comment_task']
+                  'creator', 'status_task', 'deadline']
