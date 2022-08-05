@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Task
+from .models import Task, ImageTask
+
+
+@admin.register(ImageTask)
+class ImageTaskAdmin(admin.ModelAdmin):
+    pass
+
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):

@@ -1,10 +1,11 @@
 from apps.Employees.models import *
-from apps.Comments.models import Comment
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Q
 
 
 class ImageTask(models.Model):
     image_task = models.ImageField(upload_to='Image')
+    source_task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='source_task', null=True, blank=True)
 
 
 class StatusTaskChoice(models.TextChoices):
@@ -25,13 +26,12 @@ class Task(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE, related_name='task_team', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    creator = models.OneToOneField(CustomUser, on_delete=models.SET_NULL, null=True, max_length=15,
-                                   limit_choices_to={'role': (RolesChoice.manager, RolesChoice.admin)})
+    creator = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True,
+                                limit_choices_to=Q(role=RolesChoice.admin) | Q(role=RolesChoice.manager))
+    Q(share_holder=True) | Q(distributor=True)
     status_task = models.TextField(choices=StatusTaskChoice.choices, default='Backlog', verbose_name='Status task')
     deadline = models.DateTimeField(null=True, blank=True)
-    image_task = models.ManyToManyField(ImageTask)
-    assigned_task = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='assigned_task')
-    comment_task = models.ForeignKey(Comment, on_delete=models.CASCADE, blank=True, related_name='Comment')
+    # image_task = models.ManyToManyField(ImageTask)
 
     def __str__(self):
         return self.name

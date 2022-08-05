@@ -1,4 +1,5 @@
 from apps.Employees.models import *
+from apps.Task.models import *
 
 
 class ImageComment(models.Model):
@@ -14,6 +15,7 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
     image_comment = models.ManyToManyField(ImageComment)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='task', null=True, blank=True)
 
     def __str__(self):
         return self.content[:50]

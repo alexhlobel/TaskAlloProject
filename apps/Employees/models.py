@@ -18,7 +18,7 @@ class StatusWorkerChoice(models.TextChoices):
 class CustomUser(AbstractUser):
     role = models.CharField(choices=RolesChoice.choices, max_length=20)
     status = models.CharField(max_length=15, choices=StatusWorkerChoice.choices, default=StatusWorkerChoice.bench)
-    team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name="current_team")
+    team = models.ForeignKey('Team', on_delete=models.SET_NULL, null=True, related_name="current_team", blank=True)
     slug = AutoSlugField(populate_from='username', unique=True)
 
     def set_status(self):
@@ -37,7 +37,7 @@ class CustomUser(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.set_status()
-        return super().save(self, *args, **kwargs)
+        return super().save(*args, **kwargs)
 
 
 class Team(models.Model):
