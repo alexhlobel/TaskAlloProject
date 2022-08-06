@@ -6,7 +6,6 @@ from django.db.models import Q
 
 class ImageTask(models.Model):
     image_task = models.ImageField(upload_to='Image')
-    source_task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='source_task', null=True, blank=True)
 
 
 class StatusTaskChoice(models.TextChoices):
@@ -32,7 +31,7 @@ class Task(models.Model):
     Q(share_holder=True) | Q(distributor=True)
     status_task = models.TextField(choices=StatusTaskChoice.choices, default='Backlog', verbose_name='Status task')
     deadline = models.DateTimeField(null=True, blank=True)
-    # image_task = models.ManyToManyField(ImageTask)
+    image_task = models.ManyToManyField(ImageTask, blank=True)
 
     def __str__(self):
         return self.name
