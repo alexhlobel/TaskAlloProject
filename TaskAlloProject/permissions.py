@@ -20,5 +20,7 @@ class IsAdmin(BasePermission):
     """
 
     def has_permission(self, request, view):
-        #print(request.user.is_staff, request.user.is_superuser, request.user.username)
-        return bool(request.user and request.user.role in ['admin', 'manager'])
+        print('I am isadmin')
+        if hasattr(request.user, 'role'):
+            return bool(request.user and request.user.role == 'admin')
+        return False
