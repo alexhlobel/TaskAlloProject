@@ -4,8 +4,8 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 
-router.register('comment', CommentViewSet, basename='comment')
-router.register('image', ImageCommentViewSet, basename='image')
+router.register(r'comment', CommentViewSet, basename='comment')
+router.register(r'image', ImageCommentViewSet, basename='comment_image')
 
 
 urlpatterns = router.urls
