@@ -11,11 +11,11 @@ class TaskViewSet(viewsets.ModelViewSet):
     """Список задач"""
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
 
 
 class ImageTaskViewSet(viewsets.ModelViewSet):
     """Список изображений заданий"""
     serializer_class = ImageTaskSerializer
     queryset = ImageTask.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManager]
