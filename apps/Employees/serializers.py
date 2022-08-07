@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'role', 'id', 'first_name',
-                  'last_name', 'date_joined', 'password', 'slug']
+                  'last_name', 'date_joined', 'password', 'slug', 'team', 'status']
         lookup_field = "slug"
 
     def create(self, validated_data):

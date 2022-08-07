@@ -10,8 +10,8 @@ class ImageTaskSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    team = TeamSerializer(many=False)
-    creator = UserSerializer(many=False)
+    # team = TeamSerializer(many=False)
+    # creator = UserSerializer(many=False)
 
     class Meta:
         model = Task

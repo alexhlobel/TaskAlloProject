@@ -11,8 +11,8 @@ class ImageCommentSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = UserSerializer(many=False)
-    task = TaskSerializer(many=False)
+    # author = UserSerializer(many=False)
+    # task = TaskSerializer(many=False)
 
     class Meta:
         model = Comment
