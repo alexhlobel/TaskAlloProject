@@ -15,7 +15,14 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def list(self, request, *args, **kwargs):
-        prefiltered_queryset = self.queryset.filter(team_id=request.user.team.id)
+        prefiltered_queryset = self.queryset
+
+        if request.user.role == 'worker':
+            prefiltered_queryset = self.queryset.filter(team_id=request.user.team.id)
+
+        elif request.user.role == 'manager':
+            prefiltered_queryset = self.queryset.filter(team__manager=request.user.id)
+
         queryset = self.filter_queryset(prefiltered_queryset)
 
         page = self.paginate_queryset(queryset)
