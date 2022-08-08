@@ -30,6 +30,7 @@ class CustomUser(AbstractUser):
         }
         if self.status == StatusWorkerChoice.fired:
             self.team = None
+            self.is_active = False
             return
         self.status = status[bool(self.team)]
 

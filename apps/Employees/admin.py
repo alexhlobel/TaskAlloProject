@@ -39,6 +39,10 @@ class CustomUserAdmin(admin.ModelAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     change_password_form = AdminPasswordChangeForm
+    fields = ['username', 'id', 'role', 'status', 'team', 'slug',
+              'last_login', 'is_superuser', 'first_name', 'last_name',
+              'email', 'is_staff', 'is_active', 'date_joined', ]
+    readonly_fields = ('id', 'slug')
     list_display = ("username", "email", "first_name", "last_name", "is_staff")
     list_filter = ("is_staff", "is_superuser", "is_active", "groups")
     search_fields = ("username", "first_name", "last_name", "email")

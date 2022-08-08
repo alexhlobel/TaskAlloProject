@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.ModelSerializer):
-    manager = UserSerializer(many=True)
+    #manager = UserSerializer(many=True)
 
     class Meta:
         model = Team

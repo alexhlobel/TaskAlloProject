@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from TaskAlloProject.permissions import IsAdminOrReadOnly, IsAdminOrManagerWithoutDeleteOrReadOnly
 
 from apps.Employees.models import CustomUser, Team
 from apps.Employees.serializers import UserSerializer, TeamSerializer
@@ -16,11 +17,12 @@ class UsersViewSet(ModelViewSet):
     queryset = CustomUser.objects.all()
     lookup_field = 'slug'
     authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrManagerWithoutDeleteOrReadOnly]
 
 
 class TeamViewSet(ModelViewSet):
     """Список команд"""
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdminOrManagerWithoutDeleteOrReadOnly]
+

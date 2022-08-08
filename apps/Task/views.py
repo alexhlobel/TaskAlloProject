@@ -1,7 +1,7 @@
 from rest_framework import viewsets, response
 from rest_framework.response import Response
 
-from TaskAlloProject.permissions import IsManager
+from TaskAlloProject.permissions import IsManagerOrReadOnly
 from .serializers import TaskSerializer, ImageTaskSerializer
 from .models import Task, ImageTask
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,7 +12,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     """Список задач"""
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManagerOrReadOnly]
 
     def list(self, request, *args, **kwargs):
         prefiltered_queryset = self.queryset
@@ -38,4 +38,4 @@ class ImageTaskViewSet(viewsets.ModelViewSet):
     """Список изображений заданий"""
     serializer_class = ImageTaskSerializer
     queryset = ImageTask.objects.all()
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsManagerOrReadOnly]
