@@ -33,6 +33,7 @@ class CustomUser(AbstractUser):
             return
         self.status = status[bool(self.team)]
 
+
     # @property
     # def count_tasks(self):
     #     return self.assigned_task.count()
