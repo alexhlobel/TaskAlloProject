@@ -28,11 +28,11 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     creator = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True,
                                 limit_choices_to=Q(role=RolesChoice.admin) | Q(role=RolesChoice.manager))
-    Q(share_holder=True) | Q(distributor=True)
     status_task = models.TextField(choices=StatusTaskChoice.choices, default='Backlog', verbose_name='Status task')
     deadline = models.DateTimeField(null=True, blank=True)
     image_task = models.ManyToManyField(ImageTask, blank=True)
     tasks_connections = models.ManyToManyField('self', blank=True)
+    involved_employees = models.ManyToManyField(CustomUser, blank=True, related_name='involved_employees')
 
     def __str__(self):
         return self.name

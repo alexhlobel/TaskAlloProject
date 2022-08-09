@@ -25,4 +25,3 @@ class TeamViewSet(ModelViewSet):
     serializer_class = TeamSerializer
     queryset = Team.objects.all()
     permission_classes = [IsAdminOrManagerWithoutDeleteOrReadOnly]
-
