@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class TaskalloConfig(AppConfig):
+class CommentsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'TaskAllo'
+    name = 'apps.Comments'
