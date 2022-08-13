@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+import django_on_heroku
 from pathlib import Path
 from decouple import config
 
@@ -137,3 +138,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+
+django_on_heroku.settings(locals())
