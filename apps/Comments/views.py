@@ -1,4 +1,4 @@
-from rest_framework import viewsets, response
+from rest_framework import viewsets
 from .serializers import CommentSerializer, ImageCommentSerializer
 from .models import Comment, ImageComment
 from TaskAlloProject.permissions import IsManagerOrReadAndPostOnly

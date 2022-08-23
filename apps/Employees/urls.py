@@ -1,4 +1,3 @@
-from django.urls import path, include
 from apps.Employees.views import UsersViewSet, TeamViewSet
 from rest_framework.routers import DefaultRouter
 
